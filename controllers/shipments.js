@@ -28,7 +28,7 @@ export const handleEditShipment = async (req, res) => {
 };
 
 export const handleDeleteShipment = async (req, res) => {
-  const { _id } = req.body;
+  const _id = req.params._id;
   try {
     await Shipment.findByIdAndDelete(_id);
     res.status(200).send("Shipment deleted successfully");
@@ -37,21 +37,20 @@ export const handleDeleteShipment = async (req, res) => {
   }
 };
 
-
 const getIncompleteShipments = async (page, size) => {
-
   //for skipping the shipments
   const skip = (page - 1) * size;
 
-  
   const shipments = await Shipment.find({ "status.isRouteOptimized": false })
-    .sort({ createdAt: 1 }) // 1 for ascending order 
-    .skip(skip) 
+    .select(
+      "-status -pickups._id -pickups.arrivalWaypoint.location._id -pickups.timeWindows._id -deliveries._id -deliveries.arrivalWaypoint.location._id -deliveries.timeWindows._id -loadDemands._id -__v"
+    )
+    .sort({ createdAt: 1 }) // 1 for ascending order
+    .skip(skip)
     .limit(size);
 
   return shipments;
 };
-
 
 const getIncompleteShipmentsCount = async () => {
   const count = await Shipment.countDocuments({
@@ -62,7 +61,7 @@ const getIncompleteShipmentsCount = async () => {
 
 export const handleGetIncompleteShipments = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const size = parseInt(req.query.size) || 50; 
+  const size = parseInt(req.query.size) || 50;
 
   try {
     const shipments = await getIncompleteShipments(page, size);
@@ -84,7 +83,7 @@ export const handleGetIncompleteShipments = async (req, res) => {
 };
 
 export const handleGetShipmentsByLabel = async (req, res) => {
-  const { label } = req.query; 
+  const { label } = req.query;
   if (!label) {
     return res
       .status(400)
@@ -92,11 +91,12 @@ export const handleGetShipmentsByLabel = async (req, res) => {
   }
 
   try {
-
     //i for case-insensitive and this label can be anywhere in the string
     const shipments = await Shipment.find({
-      label: { $regex: label, $options: "i" }, 
-    });
+      label: { $regex: label, $options: "i" },
+    }).select(
+      "-pickups._id -pickups.arrivalWaypoint.location._id -pickups.timeWindows._id -deliveries._id -deliveries.arrivalWaypoint.location._id -deliveries.timeWindows._id -loadDemands._id -status._id -__v"
+    );
 
     if (shipments.length === 0) {
       return res
@@ -109,5 +109,3 @@ export const handleGetShipmentsByLabel = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-

@@ -12,7 +12,7 @@ router.post("/addShipmet", handleAddShipments);
 
 router.post("/editShipment", handleEditShipment);
 
-router.post("/deleteShipment", handleDeleteShipment);
+router.post("/deleteShipment/:_id", handleDeleteShipment);
 
 router.get("/getIncompleteShipments", handleGetIncompleteShipments);
 

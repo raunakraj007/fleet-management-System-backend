@@ -7,6 +7,7 @@ import cors from "cors";
 // Import routes
 import usersRouter from "./routes/users.js";
 import shipmentsRouter from "./routes/shipments.js";
+import vehicleRouter from "./routes/vehicle.js";
 import auth from "./middlewares/auth.js";
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(cors());
 // Routes
 app.use("/api/users", usersRouter);
 app.use("/api/shipments", auth, shipmentsRouter);
+app.use("/api/vehicles", auth, vehicleRouter);
 
 app.get("/api/getData", auth, (req, res) => {
   res.send("Data fetched from  protected rout of the server");
