@@ -6,6 +6,7 @@ import cors from "cors";
 
 // Import routes
 import usersRouter from "./routes/users.js";
+import shipmentsRouter from "./routes/shipments.js";
 import auth from "./middlewares/auth.js";
 
 const app = express();
@@ -13,18 +14,19 @@ const port = process.env.PORT;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
 // Middleware for parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:5000", credentials: true }));
+app.use(cors());
 
 // Routes
 app.use("/api/users", usersRouter);
+app.use("/api/shipments", auth, shipmentsRouter);
 
 app.get("/api/getData", auth, (req, res) => {
   res.send("Data fetched from  protected rout of the server");
 });
-
 
 // MongoDB connection
 mongoose
