@@ -9,6 +9,7 @@ import usersRouter from "./routes/users.js";
 import shipmentsRouter from "./routes/shipments.js";
 import vehicleRouter from "./routes/vehicle.js";
 import auth from "./middlewares/auth.js";
+import routeOptimizationRouter from "./routes/routeOptimization.js";
 
 const app = express();
 const port = process.env.PORT;
@@ -25,6 +26,7 @@ app.use(cors());
 app.use("/api/users", usersRouter);
 app.use("/api/shipments", auth, shipmentsRouter);
 app.use("/api/vehicles", auth, vehicleRouter);
+app.use("/api/optimize-route", auth, routeOptimizationRouter);
 
 app.get("/api/getData", auth, (req, res) => {
   res.send("Data fetched from  protected rout of the server");
