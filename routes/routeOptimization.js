@@ -3,6 +3,6 @@ import { handleRouteOptimization } from "../controllers/routeOptimization.js";
 
 const router = express.Router();
 
-router.get("/", handleRouteOptimization);
+router.post("/", handleRouteOptimization);
 
 export default router;
