@@ -42,6 +42,7 @@ const getAccessToken = async () => {
 
 export const handleRouteOptimization = async (req, res) => {
   const { body } = req;
+  // console.log("Handling route optimization",body);
 
   if(body?.globalStartTime === undefined || body?.globalEndTime === undefined) {
     res.status(400).send("globalStartTime and globalEndTime are required");
@@ -50,6 +51,7 @@ export const handleRouteOptimization = async (req, res) => {
 
   try {
     const accessToken = await getAccessToken();
+    // console.log(accessToken)
 
     const { payload, invalidShipments } = await makePayloadAndInvalidShipments(
       body
@@ -208,7 +210,7 @@ const makePayloadAndInvalidShipments = async (body) => {
 
   const payload = {
     timeout: {
-      seconds: body?.maxTime ?? 10,
+      seconds: body?.maxTime ?? "10",
     },
 
     model: model,

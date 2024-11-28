@@ -23,7 +23,7 @@ const TimeWindowSchema = new mongoose.Schema({
 
 const LoadLimitsSchema = new mongoose.Schema({
   weight: {
-    amount: String,
+    maxLoad: String,
   },
 });
 

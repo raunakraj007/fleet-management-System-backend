@@ -10,23 +10,24 @@ import shipmentsRouter from "./routes/shipments.js";
 import vehicleRouter from "./routes/vehicle.js";
 import auth from "./middlewares/auth.js";
 import routeOptimizationRouter from "./routes/routeOptimization.js";
+import { corsOptions } from "./corsOrigin.js";
 
 const app = express();
 const port = process.env.PORT;
 
-// Middleware to parse JSON bodies
+
 app.use(express.json());
 
-// Middleware for parsing application/x-www-form-urlencoded
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Routes
 app.use("/api/users", usersRouter);
 app.use("/api/shipments", auth, shipmentsRouter);
 app.use("/api/vehicles", auth, vehicleRouter);
-app.use("/api/optimize-route", auth, routeOptimizationRouter);
+app.use("/api/optimizeRoute", auth, routeOptimizationRouter);
 
 app.get("/api/getData", auth, (req, res) => {
   res.send("Data fetched from  protected rout of the server");

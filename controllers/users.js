@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const handleRegister = async (req, res) => {
+  console.log(req.body);
   const { name, email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
@@ -15,13 +16,13 @@ export const handleRegister = async (req, res) => {
     await user.save();
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     });
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      maxAge: 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     res.status(201).send("User registered successfully");
@@ -31,6 +32,7 @@ export const handleRegister = async (req, res) => {
 };
 
 export const handleLogin = async (req, res) => {
+  console.log("req in login");
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -43,14 +45,14 @@ export const handleLogin = async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "24h",
     });
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      maxAge: 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
     });
-    
+
     res.status(200).send("Login successful");
   } catch (error) {
     res.status(500).send("Error logging in");
